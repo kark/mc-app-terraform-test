@@ -16,7 +16,14 @@ jobs:
       tfcOrg: example-org-41e326
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Build
+        run: yarn build
       # Only set up preview environment for pull requests
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
