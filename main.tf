@@ -15,10 +15,10 @@ terraform {
   }
 }
 
-# variable "is_prod" {
-#   description = "If false, deploys preview environment"
-#   default     = false
-# }
+variable "is_prod" {
+  description = "If false, deploys preview environment"
+  default     = false
+}
 
 # module "preview_env" {
 #   source  = "./preview-env"
