@@ -12,7 +12,6 @@ jobs:
     name: "Build and Deploy Preview Environment"
     runs-on: ubuntu-latest
     env:
-      # tfcWorkspaceName: hcup-be-${{ github.head_ref }}
       tfcOrg: example-org-41e326
     steps:
       - name: Checkout
@@ -23,7 +22,12 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Build
-        run: yarn build
+        run: |
+          if [ ${{ github.ref }} == 'refs/heads/main' ]; then
+            yarn build
+          else
+            yarn build-staging
+          fi
       # Only set up preview environment for pull requests
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -49,32 +53,24 @@ jobs:
         continue-on-error: true
       # Creates comments on pull request with Terraform output
       - name: Create comment with Terraform output
-        uses: actions/github-script@0.9.0
+        uses: actions/github-script@v6
         if: github.event_name == 'pull_request' && github.event.action != 'closed'
-        env:
-          OUTPUT: "${{ steps.output.outputs.stdout }}"
+        # env:
+        #   OUTPUT: "${{ steps.output.outputs.stdout }}" # We're using a static URL for now
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const output = `#### Preview Environment Outputs 🖌
             \`\`\`
-            ${process.env.OUTPUT}
+            https://mc-app-staging.vercel.app/
             \`\`\`
             `
-            github.issues.createComment({
+            github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: output
             })
-      # When user closes or merges pull request, this will destroy the resources then delete the TFC workspace
-      # - name: Destroy preview environment
-      #   if: github.event.action == 'closed'
-      #   id: destroy-preview-environment
-      #   run: |
-      #     terraform destroy --auto-approve
-      #     curl --header "Authorization: Bearer ${{ secrets.TFC_API_TOKEN }}" --header "Content-Type: application/vnd.api+json" --request DELETE "https://app.terraform.io/api/v2/organizations/${tfcOrg}/workspaces/${tfcWorkspaceName}"
-      # Builds and deploys production environment, similar to preview environment but isProd is set to true
       # This builds the production environment
       - name: Build and deploy Prod Environment
         id: build-deploy-prod-environment
