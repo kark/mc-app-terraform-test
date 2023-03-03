@@ -10,7 +10,7 @@ terraform {
   required_providers {
     vercel = {
       source  = "vercel/vercel"
-      version = "0.11.4"
+      version = "~> 0.11.4"
     }
   }
 }
@@ -20,11 +20,23 @@ variable "is_prod" {
   default     = false
 }
 
-module "preview_env" {
-  source  = "./preview-env"
-  is_prod = var.is_prod
+data "vercel_project_directory" "build_path" {
+  path = "public"
+}
+resource "vercel_project" "mc_app_prod" {
+  name      = "mc-app-prod"
 }
 
+resource "vercel_project" "mc_app_staging" {
+  name      = "mc-app-staging"
+}
+
+resource "vercel_deployment" "mc_custom_app" {
+  project_id  = var.is_prod ? vercel_project.mc_app_prod.id : vercel_project.mc_app_staging.id
+  files       = data.vercel_project_directory.build_path.files
+  path_prefix = "public"
+  production  = true
+}
 output "preview_url" {
-  value = module.preview_env.preview_url
+  value = vercel_deployment.mc_custom_app.url
 }
