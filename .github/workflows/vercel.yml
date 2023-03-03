@@ -19,16 +19,14 @@ jobs:
         uses: actions/checkout@v2
       # Only set up preview environment for pull requests
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v2
         with:
           cli_config_credentials_token: ${{ secrets.TFC_API_TOKEN }}
-      # Update main.tf to default to single workspace
-      # - name: Terraform Init, create TFC workspace
-      #   id: init-workspace
-      #   if: github.event_name == 'pull_request'
-      #   run: |
-      #     sed -i 's/tags = \["hashicupsBackend"\]/name = "'$tfcWorkspaceName'"/g' main.tf
-      #     terraform init -input=false
+      - name: Terraform Init
+        id: init-workspace
+        if: github.event_name == 'pull_request'
+        run: |
+          terraform init -input=false
       # Builds and deploys backend + Vercel preview environments
       - name: Build and deploy preview environment
         if: github.event_name == 'pull_request' && github.event.action != 'closed'
