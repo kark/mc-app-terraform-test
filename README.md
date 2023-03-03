@@ -1,1 +1,2 @@
 - how to run yarn build with respective URL env variable
+- build on push to branch
