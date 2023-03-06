@@ -1,17 +1,17 @@
-With the release of Custom Applications Deployment Previews feature users will be able to create as many static enviroments as they need in their daily work. For each of those environments a stable deployment URL must be configured via the deployment provider of choice. This may lead to some additional infrastructure configuration which in fact may be automated. This guide is a PoC of   IaC-based infrastructure provisioning for the Deployment Previews feature.
+With the release of Custom Applications Deployment Previews feature users will be able to create as many static enviroments as they need in their daily work. For each of those environments a stable deployment URL must be configured via the deployment provider of choice. This may lead to some additional infrastructure configuration which in fact may be automated. This guide is a PoC of   the IaC-based infrastructure provisioned for the Custom Application Deployment Previews feature.
 
 ## Prerequisites
 
 - Commercetools account, project and a Custom Application 
-- GitHub Account
+- GitHub account
 - Terraform Cloud account (free-tier)
-- Vercel Account (free-tier)
+- Vercel account (free-tier)
 
 ## Infrastructure Components
 
 Vercel service is used for hosting Custom Application. They offer a solid free-tier, possibility of configuring static URLs for environments and a Terraform Provider. All scripts for managing infrastructure configuration are hosted in a GitHub repo alongside the Custom Application source code. Terraform Cloud by Hashicorp is used for hosting the Terraform service state.
 
-> Using GitLab would seem even more suitable. GitLab provides a free encrypted remote state service for Terraform, as well as full support for Terraform build tools on their platform. GitLab’s Terraform remote state is available to all projects and is viewable in the project’s menu list.
+> Using GitLab would seem even more convenient. GitLab provides a free encrypted remote state service for Terraform, as well as full support for Terraform build tools on their platform. GitLab’s Terraform remote state is available to all projects and is viewable in the project’s menu list.
 
 ## Setting Provider Variables
 
@@ -143,3 +143,7 @@ jobs:
 ## Output
 
 ![terraform cloud output](./static/terraform-cloud.png)
+
+## Key findings
+
+<!-- TODO -->
