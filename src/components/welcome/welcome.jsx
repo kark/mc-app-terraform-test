@@ -44,6 +44,7 @@ const InfoCard = (props) => (
             }
           >
             <Spacings.Inline scale="s" alignItems="center">
+              <span>STAGING</span>
               <span>{props.title}</span>
               <AngleRightIcon size="big" color="primary" />
             </Spacings.Inline>
