@@ -9,10 +9,10 @@ const config = {
   cloudIdentifier: 'gcp-eu',
   env: {
     development: {
-      initialProjectKey: 'almond-40',
+      initialProjectKey: 'kk-deployment-testing',
     },
     production: {
-      applicationId: 'TODO',
+      applicationId: 'cl4fl8f6h88862901nlt3o2pmd8',
       url: '${env:URL}',
     },
   },
